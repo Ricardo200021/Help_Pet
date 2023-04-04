@@ -17,6 +17,7 @@
     </style>
 </head>
 <!--bg-green py-10-->
+
 <body class="h-screen bg-gradient-to-b from-green-200 to-green-500">
     <div class="w-full max-w-2xl mx-auto">
         <form onsubmit="return enviarFormulario()" method="POST" class="flex flex-col space-y-3 w-full">
@@ -67,50 +68,52 @@
             <span id="spanReativo"></span>
         </form>
     </div>
+    <form action="cadastro.php" method="post">
 
-    <script>
-        function enviarFormulario() {
-            let nomeCompletoInput = document.querySelector('input[name="nome_completo"]').value;
-            let idadeInput = document.querySelector('input[name="idade"]').value;
-            let emailInput = document.querySelector('input[name="email"]').value;
+        <script>
+            function enviarFormulario() {
+                let nomeCompletoInput = document.querySelector('input[name="nome_completo"]').value;
+                let idadeInput = document.querySelector('input[name="idade"]').value;
+                let emailInput = document.querySelector('input[name="email"]').value;
 
-            if (nomeCompletoInput.length < 1) {
-                alert('Preencha o campo de nome')
-                return false;
+                if (nomeCompletoInput.length < 1) {
+                    alert('Preencha o campo de nome')
+                    return false;
+                }
+
+                if (idadeInput.length < 1 || parseInt(idadeInput) < 18) {
+                    alert('Idade inválida')
+                    return false;
+                }
+
+                if (emailInput.length < 1) {
+                    alert('Preencha o campo de email')
+                    return false;
+                }
+
+
+                // Requisição Ajax utilizando fetch do javascript
+                var formData = new FormData();
+                formData.append('nome_completo', nomeCompletoInput);
+                formData.append('idade', idadeInput);
+                formData.append('email', emailInput);
+                formData.append('parametroPersonalizado', 'valor personalizado');
+
+                fetch('salvarBanco.php', {
+                    method: 'POST',
+                    body: formData
+                }).then(function (response) {
+                    return response.json();
+                }).then(function (response) {
+                    console.log(response)
+                    document.querySelector('#spanReativo').innerHTML = response.mensagem;
+                })
+
+
+                return true;
             }
-
-            if (idadeInput.length < 1 || parseInt(idadeInput) < 18) {
-                alert('Idade inválida')
-                return false;
-            }
-
-            if (emailInput.length < 1) {
-                alert('Preencha o campo de email')
-                return false;
-            }
-
-
-            // Requisição Ajax utilizando fetch do javascript
-            var formData = new FormData();
-            formData.append('nome_completo', nomeCompletoInput);
-            formData.append('idade', idadeInput);
-            formData.append('email', emailInput);
-            formData.append('parametroPersonalizado', 'valor personalizado');
-
-            fetch('salvarBanco.php', {
-                method: 'POST',
-                body: formData
-            }).then(function (response) {
-                return response.json();
-            }).then(function (response) {
-                console.log(response)
-                document.querySelector('#spanReativo').innerHTML = response.mensagem;
-            })
-
-
-            return true;
-        }
-    </script>
+        </script>
+    </form>
 </body>
 
 </html>

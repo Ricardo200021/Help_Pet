@@ -1,22 +1,27 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
+require_once 'Medoo.php';
 
 use Medoo\Medoo;
- 
+
+$nome = $_POST['nome_completo'];
+$idade = $_POST['idade'];
+$sexo = $_POST['sexo'];
+
 // Connect the database.
 $database = new Medoo([
     'type' => 'mysql',
-    'host' => 'database',
-    'database' => 'formulario',
+    'database_name' => 'formulario',
+    'server' => 'localhost',
     'username' => 'root',
-    'password' => 'docker'
+    'password' => 'root'
 ]);
 
 $database->insert('formulario', [
-    'nome_completo' => $_POST['nome_completo'],
-    'idade' => $_POST['idade'],
-    'sexo' => 'masculino',
+    'nome_completo' => $nome,
+    'idade' => $idade,
+    'sexo' => $sexo,
 ]);
 
 // var_dump($_GET);
